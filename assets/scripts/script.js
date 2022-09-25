@@ -64,6 +64,8 @@ var quiz = document.querySelector("#QandA")
 var score = 0;
 var timer;
 var timerCount = (quizQandA.length * 10); //15 seconds per quesiton
+var answerReal;
+var qIndex = 0
 
 var createOl = document.createElement("ol");
 
@@ -90,10 +92,13 @@ function startTimer(){
 function renderQuestion() {
     //hides welcome msg
     splash.setAttribute('style', 'display:none');
+    question.textContent = "";
+    
 
     for (var i = 0; i < quizQandA.length; i++) {
         var userQuestion = quizQandA[i].title;
         var userChoices = quizQandA[i].choices;
+         answerReal = quizQandA[i].answer;
         //"prints" question to <h2 id="question"
         question.textContent = userQuestion;
     }
@@ -108,9 +113,32 @@ function renderQuestion() {
     })
   }
     
-function wrongOrRight() {
+function wrongOrRight(event) {
+    var clickable = event.target;
+    if (clickable.matches("li")) {
+        var resultDiv = document.createElement("div");
+        resultDiv.setAttribute("id", "resultDiv")
+
+        if (clickable.textContent == answerReal) {
+            console.log("right")
+            score++;
+            resultDiv.textContent = "Correct";
+        } else {
+            timerCount = timerCount - 15;
+            console.log("wrong")
+            resultDiv.textContent = "Wrong";
+        }
+    }
+    qIndex++;
+    if  (qIndex >= quizQandA.length) {
+        endGame()
+        resultDiv.textContent = "End of quiz, you got" + score;
+    } else {
+        renderQuestion();
+    }
 
 
+quiz.appendChild(resultDiv);
 };
 
 // on game end generates score
@@ -121,6 +149,8 @@ function endGame() {
 
 //adds event listner to start button
 gStart.addEventListener("click", startGame);
+
+
 
 
 

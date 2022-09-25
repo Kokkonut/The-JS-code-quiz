@@ -170,7 +170,7 @@ function endGame() {
     
         quiz.appendChild(initialsSubmit);
 
-        initialsInput.addEventListener("click", function() {
+        initialsSubmit.addEventListener("click", function() {
             var Userinitials = initialsInput.value;
 
             if (Userinitials === null) {
@@ -179,7 +179,7 @@ function endGame() {
     
             } else {
                 var finalScore = {
-                    initials: initials,
+                    initials: Userinitials,
                     score: timescore
                 }
                 console.log(finalScore);

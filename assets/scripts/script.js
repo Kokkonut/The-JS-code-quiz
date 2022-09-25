@@ -1,68 +1,115 @@
-//defining vars for later use (id's refer to index.html & scores.html)
-let timerElement = document.querySelector("#timer")
-let qSpace = document.querySelector("#question")
-let aSpace = document.querySelector("#answers")
-let gStart = document.querySelector("start-btn")
-
-//Global Vars
-let timer;
-let activeQuestion;
-
 //Array with all questions and answers, each question with its relevent answers is nested within a OBJECT
-const quizQandA = [
+var quizQandA = [
     {
-        "question": "place holder question",
-        "answer-1": "placeh holder answer demo correct",
-        "answer-A": "placeh holder answer demo wrong",
-        "answer-B": "placeh holder answer demo wrong",
-        "answer-C": "placeh holder answer demo wrong"
+        title: "Commonly used data types DO NOT include:",
+        choices: ["strings", "booleans", "alerts", "numbers"],
+        answer: "alerts"
     },
     {
-        "question": "2 place holder question",
-        "answer-1": "2 placeh holder answer demo correct",
-        "answer-A": "2 placeh holder answer demo wrong",
-        "answer-B": "2 placeh holder answer demo wrong",
-        "answer-C": "2 placeh holder answer demo wrong"
+        title: "The condition in an if / else statement is enclosed within ____.",
+        choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
+        answer: "parentheses"
     },
     {
-        "question": "3 place holder question",
-        "answer-1": "3 placeh holder answer demo correct",
-        "answer-A": "3 placeh holder answer demo wrong",
-        "answer-B": "3 placeh holder answer demo wrong",
-        "answer-C": "3 placeh holder answer demo wrong"
-    }
+        title: "Arrays in Javascript can be used to store ____.",
+        choices: ["numbers and strings", "other arrays", "booleans", "all of the above"],
+        answer: "all of the above"
+    },
+    {
+        title: "String values must be enclosed within ____ when being assigned to variables.",
+        choices: ["commas", "curly brackets", "quotes", "parenthesis"],
+        answer: "quotes"
+    },
+    {
+        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
+        answer: "console log"
+    },
+    {
+        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
+        answer: "console log"
+    },
+    {
+        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
+        answer: "console log"
+    },
+    {
+        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
+        answer: "console log"
+    },
+    {
+        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
+        answer: "console log"
+    },
+    {
+        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
+        answer: "console log"
+    },
+    
 ];
-//Starts game on btn click, nested functions
-function startGame(){
 
-};
+
+//defining vars for later use (id's refer to index.html & scores.html)
+var timerElement = document.querySelector("#timer");
+var gStart = document.querySelector("#start-btn");
+var splash = document.querySelector("#splash");
+var question =document.querySelector("#question");
+var quiz = document.querySelector("#QandA")
+
+var score = 0;
+var timer;
+var timerCount = (quizQandA.length * 10); //15 seconds per quesiton
+
+var createOl = document.createElement("ol");
+
+function startGame() {
+    renderQuestion();
+    startTimer();
+}
+
 
 //Starts Timer 
 function startTimer(){
-
-};
-
-//makes questions display in random order
-function randomQuestion() {
-    let activeQuestion = quizQandA;
-    for (var i = 0; i < activeQuestion.length; i++) { 
-        activeQuestion[activeQuestion.length] = Math.floor(Math.random() * activeQuestion.length) + 1;
-    };
-    return activeQuestion;
-
+    timer = setInterval(function() {
+        timerCount--;
+        timerElement.textContent = "Time " + timerCount;
+        if (timerCount <=0) {
+            clearInterval(timer);
+            endGame()
+            timerElement.textContent = "Time's Up"
+        } 
+    }, 1000);
 }
 
 //renders the  question and hides #splash 
 function renderQuestion() {
+    //hides welcome msg
+    splash.setAttribute('style', 'display:none');
 
-};
-
-//renders 4 possible answers
-function answerQuestion() {
-
-};
-
+    for (var i = 0; i < quizQandA.length; i++) {
+        var userQuestion = quizQandA[i].title;
+        var userChoices = quizQandA[i].choices;
+        //"prints" question to <h2 id="question"
+        question.textContent = userQuestion;
+    }
+    //displays each item in the quizQandA.choices array
+    userChoices.forEach(function(item) {
+        var userAnswers = document.createElement("li");
+        userAnswers.textContent = item;
+        quiz.appendChild(createOl);
+        createOl.appendChild(userAnswers);
+        //executes wrong or right function on click
+        userAnswers.addEventListener("click", (wrongOrRight))
+    })
+  }
+    
 function wrongOrRight() {
+
 
 };
 
@@ -73,9 +120,7 @@ function endGame() {
 
 
 //adds event listner to start button
-//gStart.addEventListener("click", startGame);
+gStart.addEventListener("click", startGame);
 
-//TESTING REMEMBER TO DELETE
-console.log("active question " + activeQuestion);
 
-randomQuestion();
+

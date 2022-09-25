@@ -20,37 +20,6 @@ var quizQandA = [
         choices: ["commas", "curly brackets", "quotes", "parenthesis"],
         answer: "quotes"
     },
-    {
-        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
-        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
-        answer: "console log"
-    },
-    {
-        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
-        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
-        answer: "console log"
-    },
-    {
-        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
-        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
-        answer: "console log"
-    },
-    {
-        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
-        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
-        answer: "console log"
-    },
-    {
-        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
-        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
-        answer: "console log"
-    },
-    {
-        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
-        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
-        answer: "console log"
-    },
-    
 ];
 
 
@@ -60,6 +29,8 @@ var gStart = document.querySelector("#start-btn");
 var splash = document.querySelector("#splash");
 var question =document.querySelector("#question");
 var quiz = document.querySelector("#QandA")
+var wrapper = document.querySelector(".wrapper")
+var result = document.querySelector("#resultDiv")
 
 var score = 0;
 var timer;
@@ -89,16 +60,18 @@ function startTimer(){
 }
 
 //renders the  question and hides #splash 
-function renderQuestion() {
+function renderQuestion(qindex) {
     //hides welcome msg
     splash.setAttribute('style', 'display:none');
-    question.textContent = "";
+
+    createOl.innerHTML = "";
+    question.innerHTML = "";
     
 
     for (var i = 0; i < quizQandA.length; i++) {
-        var userQuestion = quizQandA[i].title;
-        var userChoices = quizQandA[i].choices;
-         answerReal = quizQandA[i].answer;
+        var userQuestion = quizQandA[qIndex].title;
+        var userChoices = quizQandA[qIndex].choices;
+         answerReal = quizQandA[qIndex].answer;
         //"prints" question to <h2 id="question"
         question.textContent = userQuestion;
     }
@@ -116,41 +89,118 @@ function renderQuestion() {
 function wrongOrRight(event) {
     var clickable = event.target;
     if (clickable.matches("li")) {
-        var resultDiv = document.createElement("div");
-        resultDiv.setAttribute("id", "resultDiv")
+        //var resultDiv = document.createElement("div");
+        //resultDiv.setAttribute("id", "resultDiv")
 
         if (clickable.textContent == answerReal) {
-            console.log("right")
             score++;
             resultDiv.textContent = "Correct";
         } else {
             timerCount = timerCount - 15;
-            console.log("wrong")
             resultDiv.textContent = "Wrong";
         }
     }
     qIndex++;
+
     if  (qIndex >= quizQandA.length) {
         endGame()
-        resultDiv.textContent = "End of quiz, you got" + score;
+        //resultDiv.textContent = "End of quiz, you got" + score;
     } else {
+
         renderQuestion();
     }
 
 
-quiz.appendChild(resultDiv);
+wrapper.appendChild(resultDiv);
 };
 
 // on game end generates score
 function endGame() {
+    question.innerHTML = "";
+    quiz.innerHTML = "";
+    result.innerHTML = "";
+
+   
+    var resultsH1 = document.createElement("h1");
+    resultsH1.setAttribute("id", "resultsH1");
+    resultsH1.textContent = "All Done!"
+
+    quiz.appendChild(resultsH1);
+
+//not doing anything right now
+    var resultsP = document.createElement("p");
+    resultsP.setAttribute("id", "resultsP")
+
+    quiz.appendChild(resultsP);
+
+    if (timerCount >= 0) {
+        clearInterval(timer);
+        var timescore = timerCount + score;
+        var resultsP2 =document.createElement("p");
+        resultsP2.textContent = "Your final score is: " + timescore;
+            quiz.appendChild(resultsP2);
+    } else {
+        clearInterval(timer);
+        var timescore = timerCount + timescore;
+        var resultsP2 =document.createElement("p");
+        resultsP2.textContent = "Your final score is: " + score;
+            quiz.appendChild(resultsP2);
+    }
+
+        // Label
+        var createLabel = document.createElement("label");
+        createLabel.setAttribute("id", "createLabel");
+        createLabel.textContent = "Enter your initials: ";
     
+        quiz.appendChild(createLabel);
+    
+        // input
+        var initialsInput = document.createElement("input");
+        initialsInput.setAttribute("type", "text");
+        initialsInput.setAttribute("id", "initials");
+        initialsInput.textContent = "";
+    
+        quiz.appendChild(initialsInput);
+    
+        // submit
+        var initialsSubmit = document.createElement("button");
+        initialsSubmit.setAttribute("type", "submit");
+        initialsSubmit.setAttribute("id", "submit");
+        initialsSubmit.textContent = "Submit";
+    
+        quiz.appendChild(initialsSubmit);
+
+        initialsInput.addEventListener("click", function() {
+            var Userinitials = initialsInput.value;
+
+            if (Userinitials === null) {
+    
+                console.log("No value entered!");
+    
+            } else {
+                var finalScore = {
+                    initials: initials,
+                    score: timescore
+                }
+                console.log(finalScore);
+                var allScores = localStorage.getItem("allScores");
+                if (allScores === null) {
+                    allScores = [];
+                } else {
+                    allScores = JSON.parse(allScores);
+                }
+                allScores.push(finalScore);
+                var newScore = JSON.stringify(allScores);
+                localStorage.setItem("allScores", newScore);
+                // Travels to final page
+                window.location.replace("./scores.html");
+            }
+
+        });
 };
+
+
 
 
 //adds event listner to start button
 gStart.addEventListener("click", startGame);
-
-
-
-
-

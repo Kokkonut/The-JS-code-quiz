@@ -38,7 +38,7 @@ var timerCount = (quizQandA.length * 10); //15 seconds per quesiton
 var answerReal;
 var qIndex = 0
 
-var createOl = document.createElement("ol");
+
 
 function startGame() {
     renderQuestion();

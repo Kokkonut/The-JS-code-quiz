@@ -10,26 +10,53 @@
     border: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
-
-header {
+body {
     display: flex;
+    justify-content: center;
+}
+
+#wrapper {
+    border: 2px solid black;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+
+}
+
+#splashDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#start-btn {
+    margin-top: 20px;
+}
+
+#gameDiv {
+    display: flex;
+    flex-direction: column;
+
+}
+
+#gameHeader {
+    display:flex;
     justify-content: space-between;
+    align-items: center;
+ 
 }
 
-.wrapper {
-display: flex;
-flex-direction: column;
-position:relative;
-left: 200px;
+#qaDiv {
+    display: flex;
+    flex-direction: column;
+
 }
 
-#splash {
-    width: 400px;
-    text-align: center;
-}
-
-#QandA {
-    width:400px;
+#initials {
+    max-width: 100px;
+    background-color: rgb(191, 185, 194);
 }
 
 

@@ -1,6 +1,7 @@
 :root {
 --main-col: rgb(152, 120, 182);
 --sec-color: rgb(240, 233, 29);
+--third-col: rgb(234, 232, 236);
 }
 
 
@@ -12,9 +13,11 @@
 }
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
-
+/* Style for main wrapper */
 #wrapper {
     border: 2px solid black;
     max-width: 500px;
@@ -22,45 +25,63 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 10px;
+    margin: 10px;
 
 }
-
+/* Style for welcome msg container */
 #splashDiv {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
+/* Start button style */
 #start-btn {
     margin-top: 20px;
 }
-
+/* main game div included initials entering screen */
 #gameDiv {
     display: flex;
+    width: 400px;
     flex-direction: column;
 
 }
-
+/* header withi #gameDiv */
 #gameHeader {
     display:flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 20px;
  
 }
-
+/* div used to nest questions and answers during game */
 #qaDiv {
     display: flex;
     flex-direction: column;
 
 }
+/* div used to nest form data on results page */
+#formDiv {
+    display: flex;
+    justify-content: space-between;
 
+}
+/* Part of endgame page */
+#createLabel {
+    margin-top: 20px;
+}
+/* Part of endgame page */
 #initials {
-    max-width: 100px;
+    width: 300px;
+    height: 30px;
     background-color: rgb(191, 185, 194);
 }
+/* Part of endgame page */
+#submit {
+    max-width: 100px;
+}
 
-
-li {
+/* answers for quiz */
+#questionRender li {
     float: left;
     clear: left;
     padding: 3px;
@@ -70,7 +91,7 @@ li {
     
 }
 
-li:hover {
+#questionRender li:hover {
     background-color: var(--sec-color);
 }
 
@@ -87,4 +108,23 @@ button:hover {
 #resultDiv {
     margin-top: 10px;
     font-size: larger;
+}
+
+
+
+/* Styles for hi-score page */
+#scores {
+    display: flex;
+    flex-direction: column;
+}
+
+#highScore li {
+    list-style-type: none;
+    padding: 5px;
+    margin: 5px;
+    background: var(--main-col);
+}
+
+#highScore li:nth-child(even) {
+    background: var(--third-col);
 }

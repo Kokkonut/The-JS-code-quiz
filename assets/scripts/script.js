@@ -1,4 +1,3 @@
-//Array with all questions and answers, each question with its relevent answers is nested within a OBJECT
 var quizQandA = [
     {
         title: "Commonly used data types DO NOT include:",
@@ -21,76 +20,145 @@ var quizQandA = [
         answer: "quotes"
     },
 ];
+//Query Selectors
+var wrapper = document.querySelector('#wrapper');
+var question = document.querySelector('#question');
 
 
-//defining vars for later use (id's refer to index.html & scores.html)
-var timerElement = document.querySelector("#timer");
-var gStart = document.querySelector("#start-btn");
-var splash = document.querySelector("#splash");
-var question =document.querySelector("#question");
-var quiz = document.querySelector("#QandA")
-var wrapper = document.querySelector(".wrapper")
-var result = document.querySelector("#resultDiv")
 
+
+//Vars for created elements needed across various functions
+var createDiv = document.createElement('div');
+var createDiv_game = document.createElement('div');
+var createH1 = document.createElement('h1');
+var createButton = document.createElement('button');
+var createUl = document.createElement('ul');
+var createWelcome = document.createElement('h1');
+var viewHiScores = document.createElement('a');
+var timerCountdown = document.createElement('h4');
+var questionRender = document.createElement('h4');
+var answersRender = document.createElement("ul");
+
+//Hoisted Vars
 var score = 0;
 var timer;
 var timerCount = (quizQandA.length * 10); //15 seconds per quesiton
 var answerReal;
-var qIndex = 0
+var qIndex = 0;
 
-var createOl = document.createElement("ol");
-
-function startGame() {
-    renderQuestion();
-    startTimer();
-}
-
-
-//Starts Timer 
 function startTimer(){
+//query selector to selct timer h3 created with gamestart()
+    var timertimer = document.querySelector("#timer-count");
+
     timer = setInterval(function() {
         timerCount--;
-        timerElement.textContent = "Time " + timerCount;
+        timertimer.textContent = "Time Left " + timerCount;
         if (timerCount <=0) {
             clearInterval(timer);
             endGame()
-            timerElement.textContent = "Time's Up"
+            timerCount.textContent = "Time's Up"
         } 
     }, 1000);
 }
 
-//renders the  question and hides #splash 
-function renderQuestion(qindex) {
-    //hides welcome msg
-    splash.setAttribute('style', 'display:none');
 
-    createOl.innerHTML = "";
-    question.innerHTML = "";
+
+function gameStart() {
+
+
+//Hides welcome txt and button
+    createDiv.style.display = 'none';
+//Creates new div for gameboard
+    createDiv_game.setAttribute('id', 'gameDiv');
+    wrapper.appendChild(createDiv_game);
+// creates div within gameboard for header
+    var gameHeader = document.createElement('div');
+        gameHeader.setAttribute('id', 'gameHeader');
+        createDiv_game.appendChild(gameHeader);
+// Adds link to hi scores
+    var linkText = document.createTextNode('Hi-scores');
+    viewHiScores.appendChild(linkText);
+    viewHiScores.title = 'Hi-scores';
+    viewHiScores.href = './scores.html';
+    gameHeader.appendChild(viewHiScores);
+// Adds timer element to header
+        timerCountdown.setAttribute('id', 'timer-count');
+        timerCountdown.textContent = 'Time left: ' + timerCount;
+        gameHeader.appendChild(timerCountdown);
+//creates addition div to nest question and answers 
+    var qaDiv = document.createElement('div');
+        qaDiv.setAttribute('id', 'qaDiv');
+        createDiv_game.appendChild(qaDiv);
+//creates space for question on gameboard
+        qaDiv.appendChild(questionRender);
+        qaDiv.setAttribute('id', 'questionRender');
+//creates space for answers on gameboard
+        answersRender.setAttribute('id', 'questionUl')
+        qaDiv.appendChild(answersRender);
+        
+        startTimer();
+        renderQuestion();
+};
+
+
+
+function displaySpalsh() {
+//creates new wrapper for welcome text and start button
+        createDiv.setAttribute('id', 'splashDiv');
+        wrapper.appendChild(createDiv);
+
+//creates h1 to display game instructions
+        createWelcome.setAttribute('id', 'splash-h1');
+        createWelcome.textContent = "Try to answer the following code related questions within the time limit. Keep in mind that incorrect answers will penalize your time/score by 15 seconds";
+        createDiv.appendChild(createWelcome);
+
+//creates game start button
+    var createButton = document.createElement('button');
+        createButton.setAttribute('id', 'start-btn');
+        createButton.textContent = 'start game';
+        createDiv.appendChild(createButton);
+
+//Adds event listener to start button
+    var gStart = document.querySelector("#start-btn");
+    gStart.addEventListener("click", gameStart);
+};
+
+
+function renderQuestion() {
+//clears txt content in anticipation for nexxt question and answers being rendered
+       answersRender.textContent = "";
+       questionRender.textContent = "";
     
-
-    for (var i = 0; i < quizQandA.length; i++) {
-        var userQuestion = quizQandA[qIndex].title;
-        var userChoices = quizQandA[qIndex].choices;
-         answerReal = quizQandA[qIndex].answer;
-        //"prints" question to <h2 id="question"
-        question.textContent = userQuestion;
-    }
-    //displays each item in the quizQandA.choices array
-    userChoices.forEach(function(item) {
+//creates index for question / asnser combinations, used later to compare if answer is wrong/right
+       for (var i = 0; i < quizQandA.length;  i++) {
+            var userQuestion = quizQandA[qIndex].title;
+            var userChoices = quizQandA[qIndex].choices;
+            answerReal = quizQandA[qIndex].answer;
+//"prints" question to <h2 id="question"
+           questionRender.textContent = userQuestion;                              
+       };
+//displays each item in the quizQandA.choices array
+       userChoices.forEach(function(item) {
         var userAnswers = document.createElement("li");
-        userAnswers.textContent = item;
-        quiz.appendChild(createOl);
-        createOl.appendChild(userAnswers);
-        //executes wrong or right function on click
-        userAnswers.addEventListener("click", (wrongOrRight))
-    })
-  }
-    
-function wrongOrRight(event) {
+            userAnswers.textContent = item;
+            questionRender.appendChild(userAnswers);
+           //executes wrong or right function on click
+           userAnswers.addEventListener("click", (answerQuestion))
+       })
+};
+
+
+
+function answerQuestion(event) {
+
+//create div for rendering results - creating display issues, replaced with HTML
+// var resultDiv =document.createElement('div');
+//     resultDiv.setAttribute('id', 'resultDiv');
+//     wrapper.appendChild(resultDiv);
+
+
     var clickable = event.target;
     if (clickable.matches("li")) {
-        //var resultDiv = document.createElement("div");
-        //resultDiv.setAttribute("id", "resultDiv")
 
         if (clickable.textContent == answerReal) {
             score++;
@@ -104,7 +172,7 @@ function wrongOrRight(event) {
 
     if  (qIndex >= quizQandA.length) {
         endGame()
-        //resultDiv.textContent = "End of quiz, you got" + score;
+        resultDiv.textContent = "End of quiz, you got " + score;
     } else {
 
         renderQuestion();
@@ -112,70 +180,71 @@ function wrongOrRight(event) {
 
 
 wrapper.appendChild(resultDiv);
+
 };
 
-// on game end generates score
 function endGame() {
-    question.innerHTML = "";
-    quiz.innerHTML = "";
-    result.innerHTML = "";
+    questionRender.textContent = "";  //innerHTML
+    answersRender.textContent = ""; 
 
    
     var resultsH1 = document.createElement("h1");
     resultsH1.setAttribute("id", "resultsH1");
-    resultsH1.textContent = "All Done!"
+    resultsH1.textContent = "Quiz Complete!!"
 
-    quiz.appendChild(resultsH1);
+    createDiv_game.appendChild(resultsH1);
 
-//not doing anything right now
-    var resultsP = document.createElement("p");
-    resultsP.setAttribute("id", "resultsP")
-
-    quiz.appendChild(resultsP);
 
     if (timerCount >= 0) {
         clearInterval(timer);
         var timescore = timerCount + score;
         var resultsP2 =document.createElement("p");
         resultsP2.textContent = "Your final score is: " + timescore;
-            quiz.appendChild(resultsP2);
+            createDiv_game.appendChild(resultsP2);
     } else {
         clearInterval(timer);
         var timescore = timerCount + timescore;
         var resultsP2 =document.createElement("p");
         resultsP2.textContent = "Your final score is: " + score;
-            quiz.appendChild(resultsP2);
+            createDiv_game.appendChild(resultsP2);
     }
 
-        // Label
+ // Label for imput form
         var createLabel = document.createElement("label");
         createLabel.setAttribute("id", "createLabel");
         createLabel.textContent = "Enter your initials: ";
     
-        quiz.appendChild(createLabel);
+            createDiv_game.appendChild(createLabel);
+
+// creates div to nest form in 
+
+        var formDiv =document.createElement('div');
+        formDiv.setAttribute('id', 'formDiv');
+
+            createDiv_game.appendChild(formDiv);
     
-        // input
+        // input form
         var initialsInput = document.createElement("input");
         initialsInput.setAttribute("type", "text");
         initialsInput.setAttribute("id", "initials");
         initialsInput.textContent = "";
     
-        quiz.appendChild(initialsInput);
+            formDiv.appendChild(initialsInput);
     
-        // submit
+        // submit button
         var initialsSubmit = document.createElement("button");
         initialsSubmit.setAttribute("type", "submit");
         initialsSubmit.setAttribute("id", "submit");
         initialsSubmit.textContent = "Submit";
     
-        quiz.appendChild(initialsSubmit);
+            formDiv.appendChild(initialsSubmit);
 
         initialsSubmit.addEventListener("click", function() {
             var Userinitials = initialsInput.value;
 
-            if (Userinitials === null) {
-    
-                console.log("No value entered!");
+            if (!Userinitials) {
+                alert('please enter initials');
+            
     
             } else {
                 var finalScore = {
@@ -197,10 +266,14 @@ function endGame() {
             }
 
         });
+
+};
+
+function score() {
+
 };
 
 
+displaySpalsh();
+var hiScore = document.querySelector('#hiscores-btn')
 
-
-//adds event listner to start button
-gStart.addEventListener("click", startGame);
